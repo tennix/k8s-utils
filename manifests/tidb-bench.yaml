@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tidb-bench
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tidb-bench
+  serviceName: tidb-bench
+  template:
+    metadata:
+      labels:
+        app: tidb-bench
+    spec:
+      containers:
+      - name: bench
+        image: pingcap/tidb-bench:latest
+        command: ["tail", "-f", "/dev/null"]
