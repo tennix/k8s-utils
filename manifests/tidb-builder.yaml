@@ -15,13 +15,13 @@ spec:
     spec:
       containers:
       - name: builder
-        image: hub.pingcap.com/pingcap/tidb-builder
+        image: hub.pingcap.net/pingcap/tidb-builder
         command: ["tail", "-f", "/dev/null"]
         volumeMounts:
         - name: varrun
           mountPath: /var/run
       - name: dind
-        image: hub.pingcap.com/pingcap/docker:dind
+        image: hub.pingcap.net/pingcap/docker:dind
         command:
         - dockerd
         - --host=unix:///var/run/docker.sock
