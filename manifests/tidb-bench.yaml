@@ -15,5 +15,5 @@ spec:
     spec:
       containers:
       - name: bench
-        image: hub.pingcap.net/tidb-bench:latest
+        image: hub.pingcap.net/pingcap/tidb-bench:latest
         command: ["tail", "-f", "/dev/null"]
