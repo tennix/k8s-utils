@@ -60,7 +60,7 @@ WORKDIR $HOME
 
 RUN git clone https://github.com/pingcap/tidb.git $GOPATH/src/github.com/pingcap/tidb \
     && git clone https://github.com/pingcap/pd.git $GOPATH/src/github.com/pingcap/pd \
-    && git clone https://github.com/pingcap/tikv.git $HOME/tikv \
+    && git clone https://github.com/tikv/tikv.git $HOME/tikv \
     && go get -u github.com/chzchzchz/goword \
        github.com/coreos/gofail \
        github.com/golang/dep/cmd/dep \
