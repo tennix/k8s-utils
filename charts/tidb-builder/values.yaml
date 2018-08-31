@@ -1,0 +1,11 @@
+# pd:
+#   gitUser: pingcap
+#   branch: master
+
+tikv:
+  gitUser: tikv
+  branch: master
+
+# tidb:
+#   gitUser: pingcap
+#   branch: master

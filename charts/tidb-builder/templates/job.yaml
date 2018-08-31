@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "tidb-builder.fullname" .}}
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      {{- if .Values.pd }}
+      - name: pd-builder
+        image: hub.pingcap.net/pingcap/tidb-builder
+        command: ["bash", "/scripts/build-pd.sh"]
+        volumeMounts:
+        - name: varrun
+          mountPath: /var/run
+        - name: scripts
+          readOnly: true
+          mountPath: /scripts
+      {{- end }}
+      {{- if .Values.tikv }}
+      - name: tikv-builder
+        image: hub.pingcap.net/pingcap/tidb-builder
+        command: ["bash", "/scripts/build-tikv.sh"]
+        volumeMounts:
+        - name: varrun
+          mountPath: /var/run
+        - name: scripts
+          readOnly: true
+          mountPath: /scripts
+      {{- end }}
+      {{- if .Values.tidb }}
+      - name: tidb-builder
+        image: hub.pingcap.net/pingcap/tidb-builder
+        command: ["bash", "/scripts/build-tidb.sh"]
+        volumeMounts:
+        - name: varrun
+          mountPath: /var/run
+        - name: scripts
+          readOnly: true
+          mountPath: /scripts
+      {{- end }}
+      - name: dind
+        image: hub.pingcap.net/pingcap/docker:dind
+        command:
+        - dockerd
+        - --host=unix:///var/run/docker.sock
+        volumeMounts:
+        - name: varrun
+          mountPath: /var/run
+        securityContext:
+          privileged: true
+      volumes:
+      - name: varrun
+        emptyDir: {}
+      - name: scripts
+        configMap:
+          name: build-scripts
