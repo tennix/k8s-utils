@@ -1,11 +1,12 @@
 FROM centos:7
 
 RUN yum install -y epel-release \
+    && yum-config-manager -y --add-repo https://download.docker.com/linux/centos/docker-ce.repo \
     && yum install -yy \
     binutils-devel \
     bzip2-devel \
     cmake3 \
-    docker-client \
+    docker-ce \
     elfutils-libelf-devel \
     elfutils-devel \
     file \
@@ -49,7 +50,8 @@ ENV GOLANG_DOWNLOAD_SHA256 4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed7
 
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz -o /tmp/golang.tar.gz \
     && echo "$GOLANG_DOWNLOAD_SHA256  /tmp/golang.tar.gz" | sha256sum -c - \
-    && tar -C /usr/local -xzf /tmp/golang.tar.gz
+    && tar -C /usr/local -xzf /tmp/golang.tar.gz \
+    && rm -rf /tmp/*
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path --default-toolchain none -y
 
@@ -59,15 +61,17 @@ ENV PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.cargo/bin:$PATH
 WORKDIR $HOME
 
 RUN git clone https://github.com/pingcap/tidb.git $GOPATH/src/github.com/pingcap/tidb \
+    && cd $GOPATH/src/github.com/pingcap/tidb \
+    && make check-setup \
     && git clone https://github.com/pingcap/pd.git $GOPATH/src/github.com/pingcap/pd \
+    && cd $GOPATH/src/github.com/pingcap/pd \
+    && make retool-setup \
     && git clone https://github.com/tikv/tikv.git $HOME/tikv \
-    && go get -u github.com/chzchzchz/goword \
-       github.com/coreos/gofail \
-       github.com/golang/dep/cmd/dep \
-       github.com/kisielk/errcheck \
-       github.com/mattn/goveralls \
-       golang.org/x/lint/golint \
     && cd $HOME/tikv \
-    && rustup override set `tail -n 1 RUST_VERSION` \
-    && rustup component add rustfmt-preview --toolchain `tail -n 1 RUST_VERSION` \
+    && rustup override set `tail -n 1 rust-toolchain` \
+    && rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain` \
     && cargo fetch
+
+ARG registry=hub.pingcap.net
+ARG auth
+RUN mkdir -p /root/.docker && echo "{\"auths\":{\"${registry}\":{\"auth\":\"${auth}\"}}}" > /root/.docker/config.json
