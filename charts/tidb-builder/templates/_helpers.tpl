@@ -34,7 +34,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "pd.gitUser" -}}
 {{- if .Values.pd -}}
-{{- .Values.pd.gitUser -}}
+{{- .Values.pd.gitUser | default "pingcap" -}}
 {{- else -}}
 {{- "pingcap" -}}
 {{- end -}}
@@ -42,7 +42,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "pd.branch" -}}
 {{- if .Values.pd -}}
-{{- .Values.pd.branch -}}
+{{- .Values.pd.branch | default "master" -}}
 {{- else -}}
 {{- "master" -}}
 {{- end -}}
@@ -50,7 +50,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "tikv.gitUser" -}}
 {{- if .Values.tikv -}}
-{{- .Values.tikv.gitUser -}}
+{{- .Values.tikv.gitUser | default "tikv" -}}
 {{- else -}}
 {{- "tikv" -}}
 {{- end -}}
@@ -58,7 +58,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "tikv.branch" -}}
 {{- if .Values.tikv -}}
-{{- .Values.tikv.branch -}}
+{{- .Values.tikv.branch | default "master" -}}
 {{- else -}}
 {{- "master" -}}
 {{- end -}}
@@ -66,7 +66,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "tidb.gitUser" -}}
 {{- if .Values.tidb -}}
-{{- .Values.tidb.gitUser -}}
+{{- .Values.tidb.gitUser | default "pingcap" -}}
 {{- else -}}
 {{- "pingcap" -}}
 {{- end -}}
@@ -74,7 +74,7 @@ Create chart name and version as used by the chart label.
 
 {{- define "tidb.branch" -}}
 {{- if .Values.tidb -}}
-{{- .Values.tidb.branch -}}
+{{- .Values.tidb.branch  | default "master" -}}
 {{- else -}}
 {{- "master" -}}
 {{- end -}}
