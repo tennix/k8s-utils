@@ -55,4 +55,4 @@ spec:
         emptyDir: {}
       - name: scripts
         configMap:
-          name: build-scripts
+          name: {{ template "tidb-builder.fullname" . }}

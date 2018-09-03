@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: build-scripts
+  name: {{ template "tidb-builder.fullname" . }}
 data:
   pd-Dockerfile: |
     FROM hub.pingcap.net/pingcap/alpine-glibc
