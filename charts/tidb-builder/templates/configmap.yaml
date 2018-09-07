@@ -5,7 +5,9 @@ metadata:
 data:
   pd-Dockerfile: |
     FROM hub.pingcap.net/pingcap/alpine-glibc
-    ADD bin/pd-server /pd-server
+    ADD bin/agent /agent
+    ADD bin/pd-server /preset_daemon/pd/bin/pd-server
+    RUN ln -s /preset_daemon/pd/bin/pd-server /pd-server
     WORKDIR /
     EXPOSE 2379 2380
     ENTRYPOINT ["/pd-server"]
@@ -13,7 +15,7 @@ data:
   build-pd.sh: |
     #!/bin/bash
     work_dir=$GOPATH/src/github.com/pingcap/pd
-    docker_dir=/root/docker/tikv
+    docker_dir=/root/docker/pd
     repo=https://github.com/{{ template "pd.gitUser" . }}/pd.git
     cd ${work_dir}
     local_branch="{{ template "pd.gitUser" . }}/{{ template "pd.branch" . }}"
@@ -24,6 +26,7 @@ data:
     image="hub.pingcap.net/pingcap/pd:{{ template "pd.gitUser" . }}-${git_rev}"
     echo "##### Making binaries #####"
     make
+    cp /agent bin/agent
     cp /scripts/pd-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
@@ -32,8 +35,9 @@ data:
 
   tikv-Dockerfile: |
     FROM hub.pingcap.net/pingcap/alpine-glibc
-    ADD bin/tikv-server /tikv-server
-    RUN chmod +x /tikv-server
+    ADD bin/agent /agent
+    ADD bin/tikv-server /preset_daemon/tikv/bin/tikv-server
+    RUN ln -s /preset_daemon/tikv/bin/tikv-server /tikv-server
     WORKDIR /
     EXPOSE 20160
     ENTRYPOINT ["/tikv-server"]
@@ -54,6 +58,7 @@ data:
     rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain`
     echo "##### Making binaries #####"
     make release
+    cp /agent bin/agent
     cp /scripts/tikv-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
@@ -62,8 +67,9 @@ data:
 
   tidb-Dockerfile: |
     FROM hub.pingcap.net/pingcap/alpine-glibc
-    ADD bin/tidb-server /tidb-server
-    RUN chmod +x /tidb-server
+    ADD bin/agent /agent
+    ADD bin/tidb-server /preset_daemon/tidb/bin/tidb-server
+    RUN ln -s /preset_daemon/tidb/bin/tidb-server /tidb-server
     WORKDIR /
     EXPOSE 4000 10080
     ENTRYPOINT ["/tidb-server"]
@@ -82,6 +88,7 @@ data:
     image="hub.pingcap.net/pingcap/tidb:{{ template "tidb.gitUser" . }}-${git_rev}"
     echo "##### Making binaries #####"
     make
+    cp /agent bin/agent
     cp /scripts/tidb-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
