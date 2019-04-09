@@ -26,7 +26,7 @@ data:
     image="hub.pingcap.net/pingcap/pd:{{ template "pd.gitUser" . }}-${git_rev}"
     echo "##### Making binaries #####"
     make
-    cp /agent bin/agent
+    cp /bin/agent bin/agent
     cp /scripts/pd-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
@@ -58,7 +58,7 @@ data:
     rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain`
     echo "##### Making binaries #####"
     make release
-    cp /agent bin/agent
+    cp /bin/agent bin/agent
     cp /scripts/tikv-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
@@ -88,7 +88,7 @@ data:
     image="hub.pingcap.net/pingcap/tidb:{{ template "tidb.gitUser" . }}-${git_rev}"
     echo "##### Making binaries #####"
     make
-    cp /agent bin/agent
+    cp /bin/agent bin/agent
     cp /scripts/tidb-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
