@@ -45,8 +45,8 @@ RUN curl -L https://github.com/gflags/gflags/archive/v${GFLAGS_VERSION}.tar.gz -
     && make -j \
     && make install
 
-ENV GOLANG_VERSION 1.10.2
-ENV GOLANG_DOWNLOAD_SHA256 4b677d698c65370afa33757b6954ade60347aaca310ea92a63ed717d7cb0c2ff
+ENV GOLANG_VERSION 1.12.2
+ENV GOLANG_DOWNLOAD_SHA256 f28c1fde8f293cc5c83ae8de76373cf76ae9306909564f54e0edcf140ce8fe3f 
 
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz -o /tmp/golang.tar.gz \
     && echo "$GOLANG_DOWNLOAD_SHA256  /tmp/golang.tar.gz" | sha256sum -c - \
@@ -71,6 +71,8 @@ RUN git clone https://github.com/pingcap/tidb.git $GOPATH/src/github.com/pingcap
     && rustup override set `tail -n 1 rust-toolchain` \
     && rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain` \
     && cargo fetch
+
+ADD agent /bin/agent
 
 ARG registry=hub.pingcap.net
 ARG auth
