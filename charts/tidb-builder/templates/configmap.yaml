@@ -57,7 +57,7 @@ data:
     rustup override set `tail -n 1 rust-toolchain`
     rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain`
     echo "##### Making binaries #####"
-    make release
+    make dist_release
     cp /bin/agent bin/agent
     cp /scripts/tikv-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
