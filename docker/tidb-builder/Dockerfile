@@ -45,8 +45,8 @@ RUN curl -L https://github.com/gflags/gflags/archive/v${GFLAGS_VERSION}.tar.gz -
     && make -j \
     && make install
 
-ENV GOLANG_VERSION 1.12.2
-ENV GOLANG_DOWNLOAD_SHA256 f28c1fde8f293cc5c83ae8de76373cf76ae9306909564f54e0edcf140ce8fe3f 
+ENV GOLANG_VERSION 1.13.3
+ENV GOLANG_DOWNLOAD_SHA256 0804bf02020dceaa8a7d7275ee79f7a142f1996bfd0c39216ccb405f93f994c0
 
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz -o /tmp/golang.tar.gz \
     && echo "$GOLANG_DOWNLOAD_SHA256  /tmp/golang.tar.gz" | sha256sum -c - \
