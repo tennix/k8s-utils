@@ -35,8 +35,8 @@ data:
 
   tikv-Dockerfile: |
     FROM hub.pingcap.net/pingcap/alpine-glibc
-    ADD bin/agent /agent
-    ADD bin/tikv-server /preset_daemon/tikv/bin/tikv-server
+    ADD tikv-bin/agent /agent
+    ADD tikv-bin/tikv-server /preset_daemon/tikv/bin/tikv-server
     RUN ln -s /preset_daemon/tikv/bin/tikv-server /tikv-server
     WORKDIR /
     EXPOSE 20160
@@ -58,7 +58,9 @@ data:
     rustup component add rustfmt-preview --toolchain `tail -n 1 rust-toolchain`
     echo "##### Making binaries #####"
     make dist_release
-    cp /bin/agent bin/agent
+    mkdir -p tikv-bin
+    cp /bin/agent tikv-bin/agent
+    cp bin/tikv-server tikv-bin/tikv-server
     cp /scripts/tikv-Dockerfile Dockerfile
     echo "##### Building Docker image ${image} #####"
     docker build -t ${image} .
